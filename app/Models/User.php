@@ -11,6 +11,8 @@ use Mail;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    const STATUSINACTIVE = 'inactive';
+    const STATUSACTIVE = 'inactive';
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +20,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'user_id', 'user_name', 'email', 'password', 'mobile_number', 'otp', 'is_verified_phone', 'is_verified_email', 'profile_image', 'type', 'gender',
+        'secret_key'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -28,6 +31,24 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function addEdit($data)
+    {
+        return User::updateOrCreate(
+            ['id' => @$data['id']],
+            [
+                'user_id' => @$data['user_id'],
+                'user_name' => @$data['user_name'],
+                'email' => @$data['email'],
+                'mobile_number' => @$data['mobile_number'],
+                'password' => @$data['password'],
+                'type' => @$data['type'] ?: 1,
+                'status' => @$data['status'],
+
+            ]
+        );
+    }
+
 
     public function getJWTIdentifier()
     {

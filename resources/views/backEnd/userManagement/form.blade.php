@@ -81,17 +81,18 @@
 								@endif
 								<div class="row">
 									<div class="form-group">
-										<label class="col-md-3 control-label">First Name :</label>
+										<label class="col-md-3 control-label"> User Id  :</label>
 										<div class="col-md-6">
-											<input type="text" name="first_name" class="form-control" placeholder="Enter First Name" value="{{ isset($user->first_name)?$user->first_name:'' }}" maxlength="255" required="required" />
+											<input type="text" name="user_id" class="form-control" placeholder="Enter User Id" value="{{ isset($user->user_id)?$user->user_id:'' }}" maxlength="255" required="required" />
 										</div>
 									</div>
 								</div>
+					
 								<div class="row">
 									<div class="form-group">
-										<label class="col-md-3 control-label">Last Name  :</label>
+										<label class="col-md-3 control-label"> Name  :</label>
 										<div class="col-md-6">
-											<input type="text" name="last_name" class="form-control" placeholder="Enter Last Name" value="{{ isset($user->last_name)?$user->last_name:'' }}" maxlength="255" required="required" />
+											<input type="text" name="last_name" class="form-control" placeholder="Enter Name" value="{{ isset($user->user_name)?$user->user_name:'' }}" maxlength="255" required="required" />
 										</div>
 									</div>
 								</div>
@@ -118,7 +119,7 @@
 									<div class="form-group">
 										<label class="col-md-3 control-label">Mobile Number :</label>
 										<div class="col-md-6">
-											<input type="text" name="mobile_number" class="form-control" placeholder="Enter Mobile Number" value="{{isset($user->mobile_number)?$user->mobile_number:''}}"  required="required" />
+											<input type="number" name="mobile_number" class="form-control" placeholder="Enter Mobile Number" value="{{isset($user->mobile_number)?$user->mobile_number:''}}"  required="required" />
 										</div>
 									</div>
 								</div>
@@ -185,7 +186,7 @@
 										{{ csrf_field() }}
 										<input type="hidden" name="user_id" value="{{ @$user_id }}" id="user_id">
 										<button type="submit" name="button" class="btn green">Submit</button>
-									    <a href="{{ url('admin/users') }}"><button class="btn btn-default m-l-10" type="button" name="cancel">Cancel </button></a>
+									    <a href="{{ url('admin/user') }}"><button class="btn btn-default m-l-10" type="button" name="cancel">Cancel </button></a>
 									</div>
 								</div>
 							</div>

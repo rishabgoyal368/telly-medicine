@@ -2,31 +2,35 @@
 @section('title','Dashboard')
 @section('content')
 <style type="text/css">
-.fa.fa-star {
-	font-size: 15px !important;
-	position: relative;
-	left: 60px;
-	bottom: 145px;
-	color: #fff;
-	opacity: 0.3;
-}
-/*11/04/19 abhi*/
-.my-flex {
-	display: flex;
-	flex-flow: row wrap;
-}
-.dashboard-stat {
-	margin-bottom: 8px;
-}
-/*end*/
+	.fa.fa-star {
+		font-size: 15px !important;
+		position: relative;
+		left: 60px;
+		bottom: 145px;
+		color: #fff;
+		opacity: 0.3;
+	}
+
+	/*11/04/19 abhi*/
+	.my-flex {
+		display: flex;
+		flex-flow: row wrap;
+	}
+
+	.dashboard-stat {
+		margin-bottom: 8px;
+	}
+
+	/*end*/
 </style>
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
 	<div class="page-content">
-		
+
 		<!-- BEGIN PAGE HEADER-->
 		<h3 class="page-title">
-		Dashboard <!-- <small>reports & statistics</small> -->
+			Dashboard
+			<!-- <small>reports & statistics</small> -->
 		</h3>
 		<div class="page-bar">
 			<ul class="page-breadcrumb">
@@ -56,7 +60,7 @@
 						</div>
 					</div>
 					<a class="more" href="#">
-					View more <i class="m-icon-swapright m-icon-white"></i>
+						View more <i class="m-icon-swapright m-icon-white"></i>
 					</a>
 				</div>
 			</div>
@@ -73,7 +77,7 @@
 						</div>
 					</div>
 					<a class="more" href="#">
-					View more <i class="m-icon-swapright m-icon-white"></i>
+						View more <i class="m-icon-swapright m-icon-white"></i>
 					</a>
 				</div>
 			</div>
@@ -90,7 +94,7 @@
 						</div>
 					</div>
 					<a class="more" href="#">
-					View more <i class="m-icon-swapright m-icon-white"></i>
+						View more <i class="m-icon-swapright m-icon-white"></i>
 					</a>
 				</div>
 				<i class="fa fa-star" aria-hidden="true"></i>
@@ -108,7 +112,7 @@
 						</div>
 					</div>
 					<a class="more" href="#">
-					View more <i class="m-icon-swapright m-icon-white"></i>
+						View more <i class="m-icon-swapright m-icon-white"></i>
 					</a>
 				</div>
 			</div>
@@ -125,7 +129,7 @@
 						</div>
 					</div>
 					<a class="more" href="#">
-					View more <i class="m-icon-swapright m-icon-white"></i>
+						View more <i class="m-icon-swapright m-icon-white"></i>
 					</a>
 				</div>
 			</div>

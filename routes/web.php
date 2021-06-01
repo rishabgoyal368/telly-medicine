@@ -51,19 +51,19 @@ Route::group(['prefix'=>'admin', 'middleware'=>'CheckAdminAuth'],function(){
 
 // common
 define('PROJECT_NAME','Laravel 8');
-define('systemImgPath',asset('public/images/system'));
-define('backEndCssPath','public/backEnd/css');
-define('backEndJsPath','public/backEnd/js');
+define('systemImgPath',asset('/images/system'));
+define('backEndCssPath','/backEnd/css');
+define('backEndJsPath','/backEnd/js');
 define('COMMON_ERROR', 'Some error occured. Please try again later after sometime');
 
 // controller
 define('AdminProfileBasePath','public/images/profile/admin');
-define('UserProfileBasePath','public/images/profile/user');
+define('UserProfileBasePath','/images/profile/user');
 
 // views
-define('AdminProfileImgPath',asset('public/images/profile/admin'));
-define('UserProfileImgPath',asset('public/images/profile/user'));
+define('AdminProfileImgPath',asset('/images/profile/admin'));
+define('UserProfileImgPath',asset('/images/profile/user'));
 
 
 //view file static path
-define('DefaultImgPath',asset('public/images/system/default-image.png'));
+define('DefaultImgPath',asset('/images/system/default-image.png'));

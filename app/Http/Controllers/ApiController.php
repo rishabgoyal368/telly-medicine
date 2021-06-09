@@ -18,7 +18,7 @@ use Mail, Hash, Auth;
 class ApiController extends Controller
 {
 
-    protected function generateResponse($code, $message, $data = array())
+    public function generateResponse($code, $message, $data = array())
     {
         $response['code'] = $code;
         $response['message'] = $message;
@@ -42,12 +42,16 @@ class ApiController extends Controller
         if ($validator->fails()) {
             $code = 404;
             $message = $validator->errors()->first();
-            $response = $this->generateResponse($code, $message, $data);
+            $response = $this->generateResponse($code, $message);
         } else {
             $data['password'] = Hash::make($data['password']);
             $data['status'] = 'Active';
             $user =  User::addEdit($data);
             if ($user) {
+                $url = url('/user-verify');
+                // Mail::send('emails.user_verify', ['otp' => $url], function ($message) use ($data) {
+                //     $message->to($data['email'], env('App_name'))->subject('User Email Verification');
+                // });
                 $code = 200;
                 $message = 'User Register Successfully';
                 $data = $user;
@@ -278,61 +282,22 @@ class ApiController extends Controller
         }
     }
 
-    public function profile(Request $request)
-    {
-
-        try {
-            $user = auth()->userOrFail();
-        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => $e->getMessage()], 200);
-        }
-
-        return response()->json(['success' => true, 'data' => $user], 200);
-    }
-
-    public function updateProfile(Request $request)
-    {
-        $data = $request->all();
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'first_name' => 'required',
-                'mobile_number' => 'required|numeric'
-            ]
-        );
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 200);
-        }
-
-        $user_id = Auth::User()->id;
-        $update_profile =  User::where('id', $user_id)->first();
-        $update_profile->first_name         = $data['first_name'];
-        $update_profile->mobile_number      = $data['mobile_number'];
-        if ($update_profile->save()) {
-            return response()->json(['success' => true, 'data' => 'User Profile Updated Successfully.'], Response::HTTP_OK);
-        } else {
-            return response()->json(['error' => 'Something went wrong, Please try again later.']);
-        }
-    }
-
 
     public function logout(Request $request)
     {
-        print_r($request);
-        die;
         try {
-            JWTAuth::invalidate($request->token);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'User logged out successfully'
-            ]);
+            JWTAuth::parseToken()->invalidate(JWTAuth::getToken());
+            $data =  [];
+            $code = 200;
+            $message = 'User logged out successfully';
+            $response = $this->generateResponse($code, $message, $data);
+            return response()->json($response);
         } catch (JWTException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, the user cannot be logged out'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $data =  [];
+            $code = 404;
+            $message = 'Sorry, the user cannot be logged out';
+            $response = $this->generateResponse($code, $message, $data);
+            return response()->json($response);
         }
     }
 
@@ -341,11 +306,5 @@ class ApiController extends Controller
     public function respondWithToken($token)
     {
         return $token;
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'code' => 200,
-            'expire_in' => auth()->factory()->getTTL() * 60
-        ]);
     }
 }

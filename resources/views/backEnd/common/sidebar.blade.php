@@ -50,6 +50,20 @@
 					</li>
 				</ul>
 			</li>
+			<li class="start {{ $selected }}">
+				<a href="javascript:;">
+					<i class="fa fa-users"></i>
+					<span class="title">Doctor Management</span>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+				</a>
+				<ul class="sub-menu">
+					<li class="<?php if($page == 'users'){ echo 'active'; }?>">
+						<a href="{{ url('admin/user') }}">
+						Users</a>
+					</li>
+				</ul>
+			</li>
 
 		</ul>
 		<!-- END SIDEBAR MENU -->

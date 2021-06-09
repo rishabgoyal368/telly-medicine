@@ -50,7 +50,6 @@ Route::group(['prefix'=>'admin', 'middleware'=>'CheckAdminAuth'],function(){
 });
 
 // common
-define('PROJECT_NAME','Laravel 8');
 define('systemImgPath',asset('/images/system'));
 define('backEndCssPath','/backEnd/css');
 define('backEndJsPath','/backEnd/js');

@@ -13,8 +13,7 @@ class UserManagementController extends Controller
 {
     public function index(Request $request)
     {
-
-        $users    = User::select('*')->where('deleted_at', NULL)->get()->toArray();
+        $users    = User::get();
         $page = 'users';
         return view('backEnd.userManagement.index', compact('page', 'users'));
     }

@@ -3,7 +3,7 @@
 	<!-- BEGIN HEAD -->
 	<head>
 		<meta charset="utf-8"/>
-		<title>{{ PROJECT_NAME }} - @yield('title')</title>
+		<title>{{ env('APP_NAME') }} - @yield('title')</title>
 		<link rel="shortcut icon" href="favicon.ico"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -61,7 +61,7 @@
 			}
 			#header_lgo {
 				height: auto;
-				width: 115px;
+				width: 84px;
 				margin: 5px 0;
 				object-fit: cover;
 			}

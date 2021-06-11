@@ -4,10 +4,11 @@ namespace App\Http\Controllers\backEnd;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Exports\UsersExport;
-use Maatwebsite\Excel\Facades\Excel;
+use Validator;
+
 use App\Models\Doctor;
 use Hash;
+use PhpParser\Comment\Doc;
 
 class DoctorController extends Controller
 {
@@ -18,89 +19,56 @@ class DoctorController extends Controller
         return view('backEnd.doctor.index', compact('page', 'users'));
     }
 
-    public function add(Request $request)
+    public function add(Request $request, $id = null)
     {
-
-        if ($request->isMethod('post')) {
-            $data                   = $request->all();
-            $user                   = new User;
-            // $user->first_name       = $data['first_name'];
-            // $user->last_name        = $data['last_name'];
-            $user->user_name        = $data['first_name'] . '' . $data['last_name'];
-            $email                  = User::where('email', $data['email'])->count();
-            if ($email > 0) {
-                return redirect('admin/user/add')->with('error', 'Email Already Exists');
+        if ($request->isMethod('GET')) {
+            if ($id) {
+                $user = Doctor::where('id', $id)->first();
             } else {
-                $user->email            = $data['email'];
+                $user = [];
             }
-            $hash_password          = Hash::make($data['password']);
-            $user->password         = str_replace("$2y$", "$2a$", $hash_password);
-            $user->mobile_number    = $data['mobile_number'];
-            $user->status           = $data['status'];
-            $user->gender           = $data['gender'];
-
-            if (!empty($_FILES['profile_image']['name'])) {
-
-                $info = pathinfo($_FILES['profile_image']['name']);
-                $extension = $info['extension'];
-                $random = uniqid();
-                $new_name = $random . '.' . $extension;
-
-                if ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') {
-                    $file_path = base_path() . '/' . UserProfileBasePath;
-                    move_uploaded_file($_FILES['profile_image']['tmp_name'], $file_path . '/' . $new_name);
-
-                    $user->profile_image = $new_name;
-                }
-            }
-            if ($user->save()) {
-                return redirect('admin/user')->with('success', 'User added successfully');
-            } else {
-                return redirect('admin/user')->with('error', COMMON_ERROR);
-            }
-        }
-        $page = "doctors";
-        return view('backEnd.doctor.form', compact('page'));
-    }
-
-    public function edit(Request $request, $id)
-    {
-
-        if ($request->isMethod('post')) {
-            $data                        = $request->all();
-            $user_edit                   = User::find($id);
-            $user_edit->user_name        = $data['first_name'] . '' . $data['last_name'];
-            $hash_password               = Hash::make($data['password']);
-            $user_edit->password         = str_replace("$2y$", "$2a$", $hash_password);
-            $user_edit->mobile_number    = $data['mobile_number'];
-            $user_edit->status           = $data['status'];
-            $user_edit->gender           = $data['gender'];
-
-            if (!empty($_FILES['profile_image']['name'])) {
-
-                $info = pathinfo($_FILES['profile_image']['name']);
-                $extension = $info['extension'];
-                $random = uniqid();
-                $new_name = $random . '.' . $extension;
-
-                if ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') {
-                    $file_path = base_path() . '/' . UserProfileBasePath;
-                    move_uploaded_file($_FILES['profile_image']['tmp_name'], $file_path . '/' . $new_name);
-
-                    $user_edit->profile_image = $new_name;
-                }
-            }
-
-            if ($user_edit->save()) {
-                return redirect()->back()->with('success', 'User edited successfully');
-            } else {
-                return redirect('admin/users')->with('error', COMMON_ERROR);
-            }
+            $page = 'doctors';
+            return view('backEnd.doctor.form', compact('page', 'user'));
         }
 
-        $user = User::where('id', $id)->first();
-        $page = "users";
-        return view('backEnd.userManagement.form', compact('page', 'user', 'id'));
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+            $validator = Validator::make(
+                $data,
+                [
+                    'name' => 'required',
+                    'email' => 'required|email|unique:users,email,' . @$data['id'] . ',id,deleted_at,NULL',
+                    'password' => @$data['id'] ? 'nullable' : 'required',
+                    'mobile_number' => 'required|numeric',
+                    'gender' => 'required',
+                    'location' => 'required',
+                    'speciality' => 'required',
+                    'description' => 'required',
+                    'status' => 'required',
+                    'profile_image' => @$data['id'] ? 'nullable|' : 'required|' . 'image|mimes:jpeg,png,jpg|max:2048'
+                ]
+            );
+
+            if ($validator->fails()) {
+                return back()->withInput($request->all())->withErrors($validator->errors());
+            } else {
+                $user = Doctor::where('id', $request->id)->first();
+                if ($request->profile_image) {
+                    $fileName = time() . '.' . $request->profile_image->extension();
+                    $request->profile_image->move(public_path('uploads/doctor'), $fileName);
+                    $data['profile_image'] = $fileName;
+                } else {
+                    $data['profile_image'] = $user['profile_image'];
+                }
+                if ($request->password) {
+                    $data['password'] = Hash::make($request->password);
+                } else {
+                    $data['password'] = $user['password'];
+                }
+                Doctor::addEdit($data);
+                return redirect('admin/manage-doctor')->with('success', 'Record updated successfully');
+            }
+        }
     }
 
     public function delete($user_id)
@@ -113,15 +81,4 @@ class DoctorController extends Controller
         }
     }
 
-    public function validate_email()
-    {
-
-        $email = $_GET['email'];
-        $count = User::where('email', $email)->count();
-        if ($count > 0) {
-            return 'false';
-        } else {
-            return 'true';
-        }
-    }
 }

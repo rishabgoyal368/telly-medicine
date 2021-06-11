@@ -23,6 +23,8 @@ class CreateDoctorsTable extends Migration
             $table->string('speciality');
             $table->longText('description');
             $table->string('status');
+            $table->string('mobile_number')->nullable();
+            $table->string('gender')->nullable();
             $table->Datetime('deleted_at')->nullable();
             $table->timestamps();
         });

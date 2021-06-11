@@ -20,7 +20,7 @@ class Doctor extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'profile_image', 'location', 'speciality', 'description', 'status'
+        'name', 'email', 'password', 'mobile_number', 'gender', 'location', 'speciality', 'description', 'status', 'profile_image',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -28,7 +28,7 @@ class Doctor extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'deleted_at', 'status',  'created_at', 'updated_at'
+        'password'
     ];
 
     public static function addEdit($data)
@@ -36,22 +36,16 @@ class Doctor extends Authenticatable implements JWTSubject
         return Doctor::updateOrCreate(
             ['id' => @$data['id']],
             [
-                'user_id' => @$data['user_id'],
-                'user_name' => @$data['user_name'],
-                'email' => @$data['email'],
-                'mobile_number' => @$data['mobile_number'],
-                'password' => @$data['password'],
-                'type' => @$data['type'] ?: 1,
-                'status' => @$data['status'],
-
-                'gender' => @$data['gender'] ?: '',
-                'secret_key' => @$data['secret_key'] ?: '',
-                'weight' => @$data['weight'] ?: '',
-                'height' => @$data['height'] ?: '',
-                'age' => @$data['age'] ?: '',
-                'hmo_id_no' => @$data['hmo_id_no'] ?: '',
-                'hmo_id_name' => @$data['hmo_id_name'] ?: '',
-                'profile_image' => @$data['profile_image'] ?: '',
+                'name' => $data['name'] ?: '',
+                'email' => $data['email'] ?: '',
+                'password' => $data['password'] ?: '',
+                'mobile_number' => $data['mobile_number'] ?: '',
+                'gender' => $data['gender'] ?: '',
+                'location' => $data['location'] ?: '',
+                'speciality' => $data['speciality'] ?: '',
+                'description' => $data['description'] ?: '',
+                'status' => $data['status'] ?: '',
+                'profile_image' => $data['profile_image'] ?: '',
             ]
         );
     }

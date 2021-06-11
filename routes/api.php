@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\RecordController;
+use App\Http\Controllers\Api\DoctorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,4 @@ Route::get('/logout',[ApiController::class, 'logout']);
 
 Route::post('/addRecords',[RecordController::class, 'addRecord']);
 Route::get('/getRecords',[RecordController::class, 'getRecords']);
+Route::get('/getDoctors',[DoctorController::class, 'getDoctors']);

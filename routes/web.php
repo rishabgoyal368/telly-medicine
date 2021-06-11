@@ -48,7 +48,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdminAuth'], function (
 
 
 	Route::get('/manage-doctor', [DoctorController::class, 'index']);
-	Route::get('/add-doctor', [DoctorController::class, 'add']);
+	Route::match(['get', 'post'], '/add-doctor', [DoctorController::class, 'add']);
+	Route::match(['get', 'post'], '/edit-doctor/{id}', [DoctorController::class, 'add']);
 	
 });
 

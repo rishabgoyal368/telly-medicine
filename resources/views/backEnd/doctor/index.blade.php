@@ -59,8 +59,8 @@
 											<td>{{ $user['speciality'] }}</td>
 											<td>{{ date('d-m-Y H:i:s',strtotime($user['created_at'])) }}</td>
 											<td>
-												<a href="{{ url('admin/user/edit/'.$user['id'])}}"><i class="fa fa-edit"></i></a>
-												<a href="{{ url('admin/user/delete/'.$user['id']) }}" class="del_btn" title="Delete"><i class="fa fa-trash"></i></a>
+												<a href="{{ url('admin/edit-doctor/'.$user['id'])}}"><i class="fa fa-edit"></i></a>
+												<a href="{{ url('admin/delete-doctor/'.$user['id']) }}" class="del_btn" title="Delete"><i class="fa fa-trash"></i></a>
 											</td>
 										</tr>
 										@endforeach

@@ -36,7 +36,8 @@ class ApiController extends Controller
                 'user_name' => 'required',
                 'password' => 'required',
                 'confirm_password' => 'required',
-                'email' => 'nullable|email|unique:users,email,Null,id,deleted_at,NULL'
+                'email' => 'nullable|email|unique:users,email,Null,id,deleted_at,NULL',
+                'mobile_number' => 'nullable|unique:users,mobile_number,Null,id,deleted_at,NULL',
             ]
         );
         if ($validator->fails()) {
@@ -70,7 +71,8 @@ class ApiController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'email'      => 'required|email|exists:users,email',
+                'email'      => 'nullable|email|exists:users,email',
+                'mobile_number'      => 'nullable|exists:users,mobile_number',
                 'password'   => 'required'
             ]
         );
@@ -79,7 +81,11 @@ class ApiController extends Controller
             $message = $validator->errors()->first();
             $response = $this->generateResponse($code, $message);
         } else {
-            $credentials = $request->only('email', 'password');
+            if (@$request->email) {
+                $credentials = $request->only('email', 'password');
+            } else if (@$request->mobile_number) {
+                $credentials = $request->only('mobile_number', 'password');
+            }
             $token = auth()->attempt($credentials);
             if ($token) {
                 $data =  $this->respondWithToken($token);
@@ -246,39 +252,46 @@ class ApiController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'secret_key'       =>  'required|numeric',
-                'email'      => 'required|email',
-                'password'   => 'required',
+                'secret_key' =>  'required',
+                'email' => 'required|email|exists:users,email',
+                'password' => 'required',
                 'confirm_password' => 'required_with:password|same:password'
             ]
         );
-
         if ($validator->fails()) {
-
-            return response()->json(['error' => $validator->errors()], 200);
+            $code = 404;
+            $message = $validator->errors()->first();
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
         }
-
-
         $email = $data['email'];
         $check_email = User::where('email', $email)->first();
         if (empty($check_email['secret_key'])) {
-            return response()->json(['error' => 'Something went wrong, Please try again later.']);
+            $code = 404;
+            $message = 'Something went wrong, Please try again later';
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
         }
-        if (empty($check_email)) {
-            return response()->json(['error' => 'This Email-id is not exists.']);
-        } else {
-            if ($check_email['secret_key'] == $data['secret_key']) {
-                $hash_password                  = Hash::make($data['password']);
-                $check_email->password          = str_replace("$2y$", "$2a$", $hash_password);
-                $check_email->secret_key               = null;
-                if ($check_email->save()) {
-                    return response()->json(['success' => true, 'message' => 'Password changed successfully.']);
-                } else {
-                    return response()->json(['error' => 'Something went wrong, Please try again later.']);
-                }
+        if ($check_email['secret_key'] == $data['secret_key']) {
+            $hash_password = Hash::make($data['password']);
+            $check_email->password = $hash_password;
+            $check_email->secret_key = null;
+            if ($check_email->save()) {
+                $code = 200;
+                $message = 'Password changed successfully';
+                $response = $this->generateResponse($code, $message);
+                return response()->json($response);
             } else {
-                return response()->json(['error' => 'secret_key mismatch']);
+                $code = 404;
+                $message = 'Something went wrong, Please try again later';
+                $response = $this->generateResponse($code, $message);
+                return response()->json($response);
             }
+        } else {
+            $code = 200;
+            $message = 'OTP is wrong';
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
         }
     }
 

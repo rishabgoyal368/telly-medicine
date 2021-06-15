@@ -25,7 +25,7 @@ Route::post('/email-verify', [ApiController::class, 'user_verify']);
 Route::post('/otp-verify', [ApiController::class, 'otp_verify']);
 Route::post('/login', [ApiController::class, 'user_login']);
 Route::post('/forgot-password',[ApiController::class, 'forgot_password']);
-// Route::post('/reset-password',[ApiController::class, 'reset_password']);
+Route::post('/reset-password',[ApiController::class, 'reset_password']);
 Route::get('/logout',[ApiController::class, 'logout']); 
 
 Route::post('/addRecords',[RecordController::class, 'addRecord']);

@@ -38,6 +38,7 @@ class ApiController extends Controller
                 'confirm_password' => 'required',
                 'email' => 'nullable|email|unique:users,email,Null,id,deleted_at,NULL',
                 'mobile_number' => 'nullable|unique:users,mobile_number,Null,id,deleted_at,NULL',
+                'signup_type' => 'required|in:email,facebook,google',
             ]
         );
         if ($validator->fails()) {
@@ -229,7 +230,7 @@ class ApiController extends Controller
                 } catch (Exception $e) {
                 }
                 $code = 200;
-                $message = 'Email sent on registered Email-id';
+                $message = 'OTP sent on registered Email-id';
                 $response = $this->generateResponse($code, $message);
             } else {
                 $code = 404;

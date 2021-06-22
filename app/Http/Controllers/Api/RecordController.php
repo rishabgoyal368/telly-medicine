@@ -73,8 +73,10 @@ class RecordController extends Controller
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $user['profile_image'] = $user->getProfileImage();
-
-            return $user;
+            $code = 404;
+            $message = 'User Record';
+            $response = $this->apiControler->generateResponse($code, $message, $user);
+            return response()->json($response);
         } catch (\Exception $e) {
             $code = 404;
             $message =  $e->getMessage();

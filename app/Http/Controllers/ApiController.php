@@ -169,42 +169,36 @@ class ApiController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'type'    => 'required|in:email,mobile_number',
-                'email'      => 'nullable|required_if:type,==,email|email|exists:users,email',
-                'mobile_number'      => 'nullable|required_if:type,==,mobile_number|numeric|exists:users,mobile_number',
-                'otp'     => 'required',
+                'email' => 'required|email|exists:users,email',
+                'otp' => 'required',
             ]
         );
-
         if ($validator->fails()) {
             $code = 404;
             $message = $validator->errors()->first();
             $response = $this->generateResponse($code, $message);
+            return response()->json($response);
         } else {
-            $new_otp  =  $data['otp'];
-            $db_key = @$request['email'] ? array('email', 'is_verified_email') : array('mobile_number', 'is_verified_phone');
-            $db_value = @$request['email'] ? $request['email'] : $request['mobile_number'];
-
-            $user_details =  User::where($db_key[0], $db_value)->first();
-            if ($new_otp  == $user_details['secret_key']) {
-                User::where($db_key[0], $db_value)->update([
-                    $db_key[0] => $db_value,
-                    $db_key[1] => 'yes',
-                    'secret_key' => NULL,
-                    'status' => User::STATUSACTIVE,
-                ]);
-                $data =  [];
+            $email = $data['email'];
+            $check_email = User::where('email', $email)->first();
+            if (empty($check_email['secret_key'])) {
+                $code = 404;
+                $message = 'Something went wrong, Please try again later';
+                $response = $this->generateResponse($code, $message);
+                return response()->json($response);
+            }
+            if ($check_email['secret_key'] == $data['otp']) {
                 $code = 200;
-                $message = 'OTP verified successfully';
-                $response = $this->generateResponse($code, $message, $data);
+                $message = 'OTP is matched';
+                $response = $this->generateResponse($code, $message);
+                return response()->json($response);
             } else {
-                $data =  [];
-                $code = 200;
-                $message = 'OTP invalid';
-                $response = $this->generateResponse($code, $message, $data);
+                $code = 400;
+                $message = 'OTP is wrong';
+                $response = $this->generateResponse($code, $message);
+                return response()->json($response);
             }
         }
-        return response()->json($response);
     }
 
     public function forgot_password(Request $request)
@@ -288,7 +282,7 @@ class ApiController extends Controller
                 return response()->json($response);
             }
         } else {
-            $code = 200;
+            $code = 400;
             $message = 'OTP is wrong';
             $response = $this->generateResponse($code, $message);
             return response()->json($response);

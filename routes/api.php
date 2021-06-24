@@ -31,3 +31,7 @@ Route::get('/logout',[ApiController::class, 'logout']);
 Route::post('/addRecords',[RecordController::class, 'addRecord']);
 Route::get('/getRecords',[RecordController::class, 'getRecords']);
 Route::get('/getDoctors',[DoctorController::class, 'getDoctors']);
+Route::get('/getDateSlot',[DoctorController::class, 'getDateSlot']);
+Route::get('/getTimeSlot',[DoctorController::class, 'getTimeSlot']);
+Route::post('/bookAppointment',[DoctorController::class, 'bookAppointment']);
+Route::get('/getbookAppointment',[DoctorController::class, 'getbookAppointment']);

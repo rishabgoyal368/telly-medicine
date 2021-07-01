@@ -66,6 +66,7 @@ class Doctor extends Authenticatable implements JWTSubject
         return [];
     }
 
+
     public function getProfileImage()
     {
         return $this->profile_image ? env('APP_URL') . 'uploads/users/' . $this->profile_image : env('APP_URL') . 'images/profile/dumy.png';

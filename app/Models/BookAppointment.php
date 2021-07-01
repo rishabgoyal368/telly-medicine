@@ -29,6 +29,6 @@ class BookAppointment extends Model
 
     public function getDateAttribute($value)
     {
-        return @$value ? date('d-m-Y', $value) : '';
+        return is_numeric($value) ? date('d-m-Y', $value) : $value;
     }
 }

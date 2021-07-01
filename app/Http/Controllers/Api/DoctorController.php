@@ -25,10 +25,17 @@ class DoctorController extends Controller
         $this->apiControler = new ApiController();
     }
 
-    public function getDoctors()
+    public function getDoctors(Request $request)
     {
         try {
-            $doctors = Doctor::paginate(10);
+            $name = $request->name;
+            $doctors = Doctor::where(function ($query) use ($name) {
+                if ($name) {
+                    $query->orwhere('name', 'LIKE', "%{$name}%");
+                    $query->orwhere('speciality', 'LIKE', "%{$name}%");
+                }
+            })
+            ->paginate(10);
             foreach ($doctors as $key => $doctor) {
                 $doctors[$key]['profile_image'] = env('APP_URL') . 'uploads/doctor/' . $doctor['profile_image'];
             }
@@ -87,6 +94,7 @@ class DoctorController extends Controller
                 $response = $this->apiControler->generateResponse($code, $message);
             } else {
                 $data['user_id'] = $user['id'];
+                $data['date'] = date('d-m-Y', strtotime($request['date']));
                 $book = BookAppointment::addEdit($data);
                 $code = 200;
                 $message =  "Book Appointment Successfully";

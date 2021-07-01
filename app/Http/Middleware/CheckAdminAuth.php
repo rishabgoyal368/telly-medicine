@@ -21,7 +21,7 @@ class CheckAdminAuth
             return redirect('/home');
         }*/
         if (!Auth::guard('admin')->check()) {
-            return redirect('/login')->with('error','Please login first');
+            return redirect('/admin')->with('error','Please login first');
         }
 
         return $next($request);

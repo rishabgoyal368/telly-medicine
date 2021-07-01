@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Admin;
 use Mail, Hash, Auth;
+use stdClass;
 
 class ApiController extends Controller
 {
@@ -72,9 +73,9 @@ class ApiController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'email'      => 'nullable|email|exists:users,email',
-                'mobile_number'      => 'nullable|exists:users,mobile_number',
-                'password'   => 'required'
+                'email' => 'nullable|email',
+                'mobile_number' => 'nullable',
+                'password' => 'required'
             ]
         );
         if ($validator->fails()) {
@@ -88,8 +89,15 @@ class ApiController extends Controller
                 $credentials = $request->only('mobile_number', 'password');
             }
             $token = auth()->attempt($credentials);
+            $type = 'patient';
+            if (!$token) {
+                $type = 'doctor';
+                $token = auth('doctor')->attempt($credentials);
+            }
             if ($token) {
-                $data =  $this->respondWithToken($token);
+                $data = new \stdClass();
+                $data->token =  $token;
+                $data->type =  $type;
                 $code = 200;
                 $message = 'Successfull Login';
                 $response = $this->generateResponse($code, $message, $data);

@@ -50,6 +50,10 @@ return [
             'driver' => 'session',
             'provider' => 'admin',
         ],
+        'doctor' => [
+            'driver' => 'jwt',
+            'provider' => 'doctor',
+        ],
 
     ],
 
@@ -84,6 +88,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
+        'doctor' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Doctor::class,
+        ],
     ],
 
     /*
@@ -105,6 +113,11 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'doctor' => [
+            'provider' => 'doctor',
             'expire' => 60,
             'throttle' => 60,
         ],

@@ -73,6 +73,7 @@ class RecordController extends Controller
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $user['profile_image'] = $user->getProfileImage();
+            $user['hmo_id_doc'] = $user->getHmoDoc();
             $code = 200;
             $message = 'User Record';
             $response = $this->apiControler->generateResponse($code, $message, $user);

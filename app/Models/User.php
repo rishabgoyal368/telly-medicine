@@ -78,6 +78,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->profile_image ? env('APP_URL') . 'uploads/users/' . $this->profile_image : env('APP_URL') . 'images/profile/dumy.png';
     }
 
+    public function getHmoDoc()
+    {
+        return $this->hmo_id_doc ? env('APP_URL') . 'uploads/users/' . $this->hmo_id_doc : '--';
+    }
+    
+
+
     public function getMobileNumberAttribute($value)
     {
         return @$value ? (string)$value : '';

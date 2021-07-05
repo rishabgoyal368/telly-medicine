@@ -58,7 +58,13 @@ if (isset($page)) {
 					<span class="title">Doctor Management</span>
 					<span class="selected"></span>
 				</a>
-
+			</li>
+			<li class="start @if($page == 'resource') active @endif">
+				<a href="{{ url('admin/manage-resource') }}">
+					<i class="fa fa-home"></i>
+					<span class="title">Manage Resources</span>
+					<span class="selected"></span>
+				</a>
 			</li>
 
 		</ul>

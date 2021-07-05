@@ -14,6 +14,7 @@ use Carbon\CarbonPeriod;
 
 use App\Models\Doctor;
 use App\Models\BookAppointment;
+use App\Models\Resource;
 
 
 class DoctorController extends Controller
@@ -35,7 +36,7 @@ class DoctorController extends Controller
                     $query->orwhere('speciality', 'LIKE', "%{$name}%");
                 }
             })
-            ->paginate(10);
+                ->paginate(10);
             foreach ($doctors as $key => $doctor) {
                 $doctors[$key]['profile_image'] = env('APP_URL') . 'uploads/doctor/' . $doctor['profile_image'];
             }
@@ -124,5 +125,17 @@ class DoctorController extends Controller
             $response = $this->apiControler->generateResponse($code, $message);
             return response()->json($response);
         }
+    }
+
+    public function getgetResource(Request $request)
+    {
+        $Resource = Resource::paginate(10);
+        foreach ($Resource as $key => $value) {
+            $Resource[$key]['image'] = $value->getImage();
+        }
+        $code = 200;
+        $message =  "Book Appointment Successfully";
+        $response = $this->apiControler->generateResponse($code, $message, $Resource);
+        return response()->json($response);
     }
 }

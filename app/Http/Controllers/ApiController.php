@@ -317,10 +317,50 @@ class ApiController extends Controller
         }
     }
 
-
-
     public function respondWithToken($token)
     {
         return $token;
+    }
+
+    public function createProfile(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make(
+            $data,
+            [
+                'body_fat' =>  'required',
+                'hmo_id' => 'nullable',
+                'hmo_id_doc' => 'nullable|max:2048',
+                'relationship' => 'required',
+                'kin_name' => 'required',
+                'kin_number' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            $code = 404;
+            $message = $validator->errors()->first();
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
+        } else {
+            $user = JWTAuth::parseToken()->authenticate();
+            if ($request->hmo_id_doc) {
+                $fileName = time() . '.' . $request->hmo_id_doc->extension();
+                $request->hmo_id_doc->move(public_path('uploads/users'), $fileName);
+                $user->hmo_id_doc = $fileName;
+            } else {
+                $user->hmo_id_doc = $user['hmo_id_doc'];
+            }
+            $user->body_fat = $data['body_fat'];
+            $user->hmo_id = $data['hmo_id'];
+            $user->relationship = $data['relationship'];
+            $user->kin_name = $data['kin_name'];
+            $user->kin_number = $data['kin_number'];
+            $user->save();
+            $data =  [];
+            $code = 200;
+            $message = 'Profile Updated successfully';
+            $response = $this->generateResponse($code, $message, $data);
+            return response()->json($response);
+        }
     }
 }

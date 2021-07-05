@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\backEnd\ProfileController;
 use App\Http\Controllers\backEnd\UserManagementController;
 use App\Http\Controllers\backEnd\DoctorController;
+use App\Http\Controllers\backEnd\ResourceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdminAuth'], function (
 	Route::get('/manage-doctor', [DoctorController::class, 'index']);
 	Route::match(['get', 'post'], '/add-doctor', [DoctorController::class, 'add']);
 	Route::match(['get', 'post'], '/edit-doctor/{id}', [DoctorController::class, 'add']);
+
+	Route::get('/manage-resource', [ResourceController::class, 'index']);
+	Route::match(['get', 'post'], '/add-resource', [ResourceController::class, 'add']);
+	Route::match(['get', 'post'], '/edit-resource/{id}', [ResourceController::class, 'add']);
+	Route::match(['get', 'post'], '/delete-resource/{id}', [ResourceController::class, 'delete']);
+
 	
 });
 

@@ -1,5 +1,5 @@
 @extends('backEnd.layouts.master')
-@section('title','Doctor management')
+@section('title','Resource management')
 @section('content')
 
 <style type="text/css">
@@ -19,14 +19,9 @@
 <section>
 	<div class="page-content-wrapper ">
 		<div class="page-content">
-			<h3 class="page-title">Doctor Management</h3>
+			<h3 class="page-title">Resource Management</h3>
 			<div class="page-bar">
-				<ul class="page-breadcrumb">
-					<li>
-						<i class="fa fa-bars"></i>
-						<a href="{{ url('admin/users') }}">Users</a>
-					</li>
-				</ul>
+			
 
 				<div class="row">
 					<div class="col-md-12">
@@ -36,7 +31,7 @@
 									<table class="table table-striped table-bordered table-hover" id="myTable">
 										<div class="table-btn">
 											<div class="btn-group pull-right">
-												<a href="{{ url('admin/add-doctor')}}">
+												<a href="{{ url('admin/add-resource')}}">
 													<button id="sample_editable_1_new" class="btn green">
 														Add New <i class="fa fa-plus"></i>
 													</button>

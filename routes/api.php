@@ -29,6 +29,11 @@ Route::post('/reset-password',[ApiController::class, 'reset_password']);
 
 Route::get('/logout',[ApiController::class, 'logout']); 
 Route::post('/createProfile', [ApiController::class, 'createProfile']);
+Route::post('/createProfile2', [ApiController::class, 'createProfile2']);
+Route::post('/createProfile3', [ApiController::class, 'createProfile3']);
+Route::post('/createProfile4', [ApiController::class, 'createProfile4']);
+Route::post('/createProfile5', [ApiController::class, 'createProfile5']);
+
 Route::post('/addRecords',[RecordController::class, 'addRecord']);
 Route::get('/getRecords',[RecordController::class, 'getRecords']);
 Route::post('/getDoctors',[DoctorController::class, 'getDoctors']);

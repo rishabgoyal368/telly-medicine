@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Admin;
+use App\Models\UserProfile;
 use Mail, Hash, Auth;
 use stdClass;
 
@@ -356,6 +357,145 @@ class ApiController extends Controller
             $user->kin_name = $data['kin_name'];
             $user->kin_number = $data['kin_number'];
             $user->save();
+            $data =  [];
+            $code = 200;
+            $message = 'Profile Updated successfully';
+            $response = $this->generateResponse($code, $message, $data);
+            return response()->json($response);
+        }
+    }
+
+    public function createProfile2(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make(
+            $data,
+            [
+                'blood_group' => 'required',
+                'genotype' => 'required',
+                'is_smoking' => 'required',
+                'is_alcohol' => 'required',
+                'is_diet' => 'required',
+                'last_medical_checkup' => 'nullable',
+            ]
+        );
+        if ($validator->fails()) {
+            $code = 404;
+            $message = $validator->errors()->first();
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
+        } else {
+            $user = JWTAuth::parseToken()->authenticate();
+            UserProfile::create([
+                'user_id' => @$user['id'],
+                'blood_group' => @$request->blood_group,
+                'genotype' => @$request->genotype,
+                'is_smoking' => @$request->is_smoking,
+                'is_alcohol' => @$request->is_alcohol,
+                'is_diet' => @$request->is_diet,
+                'last_medical_checkup' => @$request->last_medical_checkup,
+            ]);
+
+            $data =  [];
+            $code = 200;
+            $message = 'Profile Updated successfully';
+            $response = $this->generateResponse($code, $message, $data);
+            return response()->json($response);
+        }
+    }
+
+    public function createProfile3(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make(
+            $data,
+            [
+                'antibiotics' => 'required',
+                'blood_presure' => 'required',
+                'antacid' => 'required',
+                'hormone_therapy' => 'required',
+                'anti_asthma' => 'required',
+                'arpirin' => 'required',
+                'diet_pill' => 'required',
+                'supplement' => 'required',
+                'herbal_product' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            $code = 404;
+            $message = $validator->errors()->first();
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
+        } else {
+            $user = JWTAuth::parseToken()->authenticate();
+            UserProfile::where('user_id', $user['id'])->update([
+                'antibiotics' => @$request->antibiotics,
+                'blood_presure' => @$request->blood_presure,
+                'antacid' => @$request->antacid,
+                'hormone_therapy' => @$request->hormone_therapy,
+                'anti_asthma' => @$request->anti_asthma,
+                'arpirin' => @$request->arpirin,
+                'diet_pill' => @$request->diet_pill,
+                'supplement' =>  @$request->supplement,
+                'herbal_product' =>  @$request->herbal_product,
+            ]);
+
+            $data =  [];
+            $code = 200;
+            $message = 'Profile Updated successfully';
+            $response = $this->generateResponse($code, $message, $data);
+            return response()->json($response);
+        }
+    }
+
+    public function createProfile4(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make(
+            $data,
+            [
+                'exercise_level' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            $code = 404;
+            $message = $validator->errors()->first();
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
+        } else {
+            $user = JWTAuth::parseToken()->authenticate();
+            UserProfile::where('user_id ', $user['id'])->update([
+                'exercise_level' => @$request->antibiotics,
+            ]);
+
+            $data =  [];
+            $code = 200;
+            $message = 'Profile Updated successfully';
+            $response = $this->generateResponse($code, $message, $data);
+            return response()->json($response);
+        }
+    }
+
+    public function createProfile5(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make(
+            $data,
+            [
+                'is_any_disease' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            $code = 404;
+            $message = $validator->errors()->first();
+            $response = $this->generateResponse($code, $message);
+            return response()->json($response);
+        } else {
+            $user = JWTAuth::parseToken()->authenticate();
+            UserProfile::where('user_id', $user['id'])->update([
+                'is_any_disease' => is_array($request->is_any_disease) ? serialize($request->is_any_disease) : @$request->is_any_disease,
+            ]);
+
             $data =  [];
             $code = 200;
             $message = 'Profile Updated successfully';

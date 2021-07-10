@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\RecordController;
 use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\Api\VitalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,3 +43,8 @@ Route::get('/getTimeSlot',[DoctorController::class, 'getTimeSlot']);
 Route::post('/bookAppointment',[DoctorController::class, 'bookAppointment']);
 Route::get('/getbookAppointment',[DoctorController::class, 'getbookAppointment']);
 Route::get('/getResource',[DoctorController::class, 'getgetResource']);
+
+Route::get('/getStaticVital',[VitalController::class, 'getStaticVital']);
+Route::get('/getVital',[VitalController::class, 'getVital']);
+Route::post('/addVital',[VitalController::class, 'addVital']);
+Route::post('/addVital',[VitalController::class, 'addVital']);
